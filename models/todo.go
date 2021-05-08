@@ -5,10 +5,6 @@ import (
     _ "github.com/go-sql-driver/mysql"
 )
 
-type Getter interface {GetAll() []Item}
-
-type Adder interface {Add(item Item)}
-
 type Deleter interface {Delete(items []Item)}
 
 type Updater interface {Update(item Item)}
@@ -31,12 +27,23 @@ type Repo struct {
 
 type Todo struct {
     Id int `json:"id"`
-    Checked bool `json:"checked"`
+    Checked int `json:"checked"`
     Title string `json:"title"`
 }
 
-func (r *Repo) Add(item Item) {
-    r.Items = append(r.Items, item)
+func Add(item Item, db *sql.DB) sql.Result {
+    var ins *sql.Stmt
+    var err error
+    ins,err = db.Prepare ("INSERT INTO `tododb`.`todo` (`checked`, `title`) VALUES (?, ?);")
+     if err != nil {
+        panic(err.Error())
+     }
+     defer ins.Close()
+     res,err := ins.Exec(item.Checked, item.Title)
+     if err != nil {
+             panic(err.Error())
+          }
+      return res;
 }
 
 func GetAll(db *sql.DB) []Item {

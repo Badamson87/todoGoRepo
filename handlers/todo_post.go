@@ -1,9 +1,11 @@
 package handlers
 
 import (
+    "fmt"
     "net/http"
     "github.com/gin-gonic/gin"
     "todo/models"
+	"database/sql"
 )
 
 type todoPostRequest struct {
@@ -12,17 +14,23 @@ type todoPostRequest struct {
     Title string  `json:"title"`
 }
 
-func TodoPost(todoModel todo.Adder) gin.HandlerFunc {
+func TodoPost(db *sql.DB) gin.HandlerFunc {
     return func(c *gin.Context) {
         requestBody := todoPostRequest{}
+
+        fmt.Println("requestBody")
+        fmt.Println(requestBody)
         c.Bind(&requestBody)
-            todo := todo.Item{
+            item := todo.Item {
                 Id: requestBody.Id,
                 Checked: requestBody.Checked,
                 Title: requestBody.Title,
             }
-        todoModel.Add(todo)
-        c.Status(http.StatusNoContent)
+
+        fmt.Println("todo")
+        fmt.Println(item)
+        results := todo.Add(item, db)
+        c.JSON(http.StatusOK, results)
     }
 }
 
