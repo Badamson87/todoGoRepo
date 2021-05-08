@@ -11,10 +11,11 @@ func main() {
     // db connection would go here and pass the db
     todoModel := todo.New()
     r := gin.Default()
-
-    r.GET("/todo", handlers.TodoGet(todoModel))
-    r.POST("/todo", handlers.TodoPost(todoModel))
-
-    r.Run() //  listen and serve on :8080
+    api := r.Group("/api")
+    {
+        api.GET("/todo", handlers.TodoGet(todoModel))
+        api.POST("/todo", handlers.TodoPost(todoModel))
+    }
+    r.Run("0.0.0.0:5000")
   }
 
