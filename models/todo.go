@@ -1,5 +1,9 @@
 package todo
-// import ("fmt")
+import (
+// "fmt"
+"github.com/techinscribed/global-db/sqldb"
+)
+
 
 type Getter interface {GetAll() []Item}
 
@@ -29,8 +33,12 @@ func (r *Repo) Add(item Item) {
     r.Items = append(r.Items, item)
 }
 
-func (r *Repo) GetAll() []Item {
-    return r.Items
+func (db DataBase) GetAll() []Item {
+    results,err := db.Query("SELECT * FROM todo")
+    if err != nil {
+            panic(err.Error())
+        }
+        return results;
 }
 
 func (r Repo) Delete(items []Item) {
