@@ -7,9 +7,14 @@ import (
     "todo/models"
     "database/sql"
     _ "github.com/go-sql-driver/mysql"
-    )
 
-var DB *sql.DB
+    )
+// var DB *DB
+
+//    DB type DB struct {
+//         *sql.DB
+//     }
+
 
 func main() {
     // db connection would go here and pass the db
@@ -17,7 +22,7 @@ func main() {
     if err != nil{
         panic(err.Error())
     }
-    DB = db
+//     DB = db
     defer db.Close()
 
     fmt.Println("connected to mysql")
@@ -26,20 +31,20 @@ func main() {
     r := gin.Default()
     api := r.Group("/api")
     {
+//         api.GET("/todo", handlers.TodoGet(todoModel))
         api.GET("/todo", handlers.TodoGet(db))
         api.POST("/todo", handlers.TodoPost(todoModel))
         api.DELETE("/todo", handlers.TodoPost(todoModel))
         api.PUT("/todo", handlers.TodoPost(todoModel))
     }
 
-    insert, err := db.Query("INSERT INTO todo (checked, title) VALUES (0, 'dbTest')")
-    if err != nil {
-        panic(err.Error())
-    }
-    defer insert.Close()
+//     insert, err := db.Query("INSERT INTO todo (checked, title) VALUES (0, 'dbTest')")
+//     if err != nil {
+//         panic(err.Error())
+//     }
+//     defer insert.Close()
 
-    fmt.Println("inserted user")
-
+//     fmt.Println("inserted user")
+//
     r.Run("0.0.0.0:5000")
   }
-
