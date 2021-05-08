@@ -15,6 +15,8 @@ func main() {
     {
         api.GET("/todo", handlers.TodoGet(todoModel))
         api.POST("/todo", handlers.TodoPost(todoModel))
+        api.DELETE("/todo", handlers.TodoPost(todoModel))
+        api.PUT("/todo", handlers.TodoPost(todoModel))
     }
     r.Run("0.0.0.0:5000")
   }
