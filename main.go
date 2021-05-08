@@ -24,8 +24,8 @@ func main() {
     {
         api.GET("/todo", handlers.TodoGet(db))
         api.POST("/todo", handlers.TodoPost(db))
+        api.PUT("/todo", handlers.TodoUpdate(db))
 //         api.DELETE("/todo", handlers.TodoPost(todoModel))
-//         api.PUT("/todo", handlers.TodoPost(todoModel))
     }
 
 //     insert, err := db.Query("INSERT INTO todo (checked, title) VALUES (0, 'dbTest')")

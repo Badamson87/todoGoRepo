@@ -17,8 +17,6 @@ type todoPostRequest struct {
 func TodoPost(db *sql.DB) gin.HandlerFunc {
     return func(c *gin.Context) {
         requestBody := todoPostRequest{}
-
-        fmt.Println("requestBody")
         fmt.Println(requestBody)
         c.Bind(&requestBody)
             item := todo.Item {
@@ -26,8 +24,6 @@ func TodoPost(db *sql.DB) gin.HandlerFunc {
                 Checked: requestBody.Checked,
                 Title: requestBody.Title,
             }
-
-        fmt.Println("todo")
         fmt.Println(item)
         results := todo.Add(item, db)
         c.JSON(http.StatusOK, results)

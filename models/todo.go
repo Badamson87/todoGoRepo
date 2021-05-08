@@ -46,6 +46,21 @@ func Add(item Item, db *sql.DB) sql.Result {
       return res;
 }
 
+func Update(item Item, db *sql.DB) sql.Result {
+    var ins *sql.Stmt
+    var err error
+    ins,err = db.Prepare ("UPDATE `tododb`.`todo` SET `checked` = ?, `title` = ? WHERE (`id` = ?);")
+     if err != nil {
+        panic(err.Error())
+     }
+     defer ins.Close()
+     res,err := ins.Exec(item.Checked, item.Title, item.Id)
+     if err != nil {
+             panic(err.Error())
+          }
+      return res;
+}
+
 func GetAll(db *sql.DB) []Item {
     var retVal []Item
     results,err := db.Query("SELECT * FROM todo")
