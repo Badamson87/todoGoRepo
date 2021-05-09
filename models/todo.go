@@ -113,7 +113,7 @@ func GetAllHistory(db *sql.DB) []Item {
         defer results.Close()
         for results.Next() {
             var item Item
-            err = results.Scan(&item.Id, &item.Checked, &item.Title)
+            err = results.Scan(&item.Id, &item.Checked, &item.Title, &item.IsDeleted)
             if err != nil {
                fmt.Println("unable to parse todo")
                panic(err.Error())
