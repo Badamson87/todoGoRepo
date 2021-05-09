@@ -12,7 +12,7 @@ import (
 
 func main() {
     // establish DB connection
-    db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/tododb")
+    db, err := sql.Open("mysql", "root:R00tPassword1!@tcp(127.0.0.1:3306)/tododb")
     if err != nil{
         panic(err.Error())
     }
