@@ -24,7 +24,6 @@ func TodoUpdate(db *sql.DB) gin.HandlerFunc {
                 Checked: requestBody.Checked,
                 Title: requestBody.Title,
             }
-        fmt.Println(item)
         results := todo.Update(item, db)
         c.JSON(http.StatusOK, results)
     }

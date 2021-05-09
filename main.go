@@ -5,6 +5,7 @@ import (
     "github.com/gin-gonic/gin"
     "todo/handlers"
     "database/sql"
+//     "net/http"
     _ "github.com/go-sql-driver/mysql"
 
     )
@@ -16,7 +17,6 @@ func main() {
         panic(err.Error())
     }
     defer db.Close()
-
     fmt.Println("connected to mysql")
 
     r := gin.Default()
@@ -25,16 +25,7 @@ func main() {
         api.GET("/todo", handlers.TodoGet(db))
         api.POST("/todo", handlers.TodoPost(db))
         api.PUT("/todo", handlers.TodoUpdate(db))
-//         api.DELETE("/todo", handlers.TodoPost(todoModel))
+        api.DELETE("/todo/" , handlers.TodoDelete(db))
     }
-
-//     insert, err := db.Query("INSERT INTO todo (checked, title) VALUES (0, 'dbTest')")
-//     if err != nil {
-//         panic(err.Error())
-//     }
-//     defer insert.Close()
-
-//     fmt.Println("inserted user")
-//
     r.Run("0.0.0.0:5000")
   }

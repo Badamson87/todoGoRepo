@@ -2,27 +2,14 @@ package todo
 import (
     "fmt"
     "database/sql"
+    "strings"
     _ "github.com/go-sql-driver/mysql"
 )
-
-type Deleter interface {Delete(items []Item)}
-
-type Updater interface {Update(item Item)}
 
 type Item struct {
     Id int `json:"id"`
     Checked bool  `json:"checked"`
     Title string  `json:"title"`
-}
-
-func New() *Repo {
-    return &Repo{
-        Items: []Item{},
-    }
-}
-
-type Repo struct {
-    Items []Item
 }
 
 type Todo struct {
@@ -31,7 +18,7 @@ type Todo struct {
     Title string `json:"title"`
 }
 
-func Add(item Item, db *sql.DB) sql.Result {
+func Add(item Item, db *sql.DB) int64 {
     var ins *sql.Stmt
     var err error
     ins,err = db.Prepare ("INSERT INTO `tododb`.`todo` (`checked`, `title`) VALUES (?, ?);")
@@ -43,7 +30,8 @@ func Add(item Item, db *sql.DB) sql.Result {
      if err != nil {
              panic(err.Error())
           }
-      return res;
+      lid, err := res.LastInsertId()
+      return lid
 }
 
 func Update(item Item, db *sql.DB) sql.Result {
@@ -59,6 +47,26 @@ func Update(item Item, db *sql.DB) sql.Result {
              panic(err.Error())
           }
       return res;
+}
+
+func Delete(ids string, db *sql.DB) bool {
+        idArray := strings.Split(ids, ",")
+        var ins *sql.Stmt
+        var err error
+
+        for i := 0;  i  < len(idArray); i++  {
+           ins,err = db.Prepare ("DELETE FROM `tododb`.`todo` WHERE (`id` = ?);")
+            if err != nil {
+                panic(err.Error())
+             }
+             defer ins.Close()
+             res,err := ins.Exec(idArray[i])
+             if err != nil {
+                     panic(err.Error())
+                  }
+                  fmt.Println(res)
+              }
+              return err == nil
 }
 
 func GetAll(db *sql.DB) []Item {
@@ -80,17 +88,3 @@ func GetAll(db *sql.DB) []Item {
         return retVal;
 }
 
-func (r Repo) Delete(items []Item) {
-//     for index, element := range r {
-//         for i, item := range items {
-//             if element.Id == item.Id {
-//                 RemoveIndex(r, index)
-//             }
-//         }
-//     }
-//     return r.Items
-}
-
-func (r Repo) Update (item Item) {
-
-}
