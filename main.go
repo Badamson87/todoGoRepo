@@ -29,5 +29,5 @@ func main() {
         api.DELETE("/todo/" , handlers.TodoDelete(db))
         api.DELETE("/todo/soft/" , handlers.TodoSoftDelete(db))
     }
-    r.Run("0.0.0.0:80")
+    r.Run("0.0.0.0:5000")
   }
