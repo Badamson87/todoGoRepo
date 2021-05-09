@@ -10,12 +10,7 @@ type Item struct {
     Id int `json:"id"`
     Checked bool  `json:"checked"`
     Title string  `json:"title"`
-}
-
-type Todo struct {
-    Id int `json:"id"`
-    Checked int `json:"checked"`
-    Title string `json:"title"`
+    IsDeleted bool  `json:"isDeleted"`
 }
 
 func Add(item Item, db *sql.DB) int64 {
@@ -49,6 +44,27 @@ func Update(item Item, db *sql.DB) sql.Result {
       return res;
 }
 
+func SoftDelete(ids string, db *sql.DB) bool {
+        idArray := strings.Split(ids, ",")
+        var ins *sql.Stmt
+        var err error
+
+        for i := 0;  i  < len(idArray); i++  {
+           ins,err = db.Prepare ("UPDATE `tododb`.`todo` SET `isDeleted` = true WHERE (`id` = ?);")
+            if err != nil {
+                panic(err.Error())
+             }
+             defer ins.Close()
+             res,err := ins.Exec(idArray[i])
+             if err != nil {
+                     panic(err.Error())
+                  }
+                  fmt.Println(res)
+              }
+              return err == nil
+}
+
+
 func Delete(ids string, db *sql.DB) bool {
         idArray := strings.Split(ids, ",")
         var ins *sql.Stmt
@@ -71,7 +87,26 @@ func Delete(ids string, db *sql.DB) bool {
 
 func GetAll(db *sql.DB) []Item {
     var retVal []Item
-    results,err := db.Query("SELECT * FROM todo")
+    results,err := db.Query("SELECT * FROM todo WHERE (`isDeleted` = false);")
+    if err != nil {
+            panic(err.Error())
+        }
+        defer results.Close()
+        for results.Next() {
+            var item Item
+            err = results.Scan(&item.Id, &item.Checked, &item.Title, &item.IsDeleted)
+            if err != nil {
+               fmt.Println("unable to parse todo")
+               panic(err.Error())
+            }
+            retVal = append(retVal, item)
+        }
+        return retVal;
+}
+
+func GetAllHistory(db *sql.DB) []Item {
+    var retVal []Item
+    results,err := db.Query("SELECT * FROM todo WHERE (`isDeleted` = true);")
     if err != nil {
             panic(err.Error())
         }

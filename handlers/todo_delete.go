@@ -15,4 +15,12 @@ func TodoDelete(db *sql.DB) gin.HandlerFunc {
     }
 }
 
+func TodoSoftDelete(db *sql.DB) gin.HandlerFunc {
+    return func(c *gin.Context) {
+    var ids = c.Query("id");
+        results := todo.SoftDelete(ids, db)
+        c.JSON(http.StatusOK, results)
+    }
+}
+
 

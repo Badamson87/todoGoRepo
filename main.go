@@ -23,9 +23,11 @@ func main() {
     api := r.Group("/api")
     {
         api.GET("/todo", handlers.TodoGet(db))
+        api.GET("/todo/history", handlers.TodoGetHistory(db))
         api.POST("/todo", handlers.TodoPost(db))
         api.PUT("/todo", handlers.TodoUpdate(db))
         api.DELETE("/todo/" , handlers.TodoDelete(db))
+        api.DELETE("/todo/soft/" , handlers.TodoSoftDelete(db))
     }
     r.Run("0.0.0.0:5000")
   }

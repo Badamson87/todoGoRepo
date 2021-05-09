@@ -14,4 +14,11 @@ func TodoGet(db *sql.DB) gin.HandlerFunc {
     }
 }
 
+func TodoGetHistory(db *sql.DB) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        results := todo.GetAllHistory(db)
+        c.JSON(http.StatusOK, results)
+    }
+}
+
 

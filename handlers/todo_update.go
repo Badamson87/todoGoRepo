@@ -12,6 +12,7 @@ type todoPutRequest struct {
     Id int `json:"id"`
     Checked bool  `json:"checked"`
     Title string  `json:"title"`
+    IsDeleted bool  `json:"isDeleted"`
 }
 
 func TodoUpdate(db *sql.DB) gin.HandlerFunc {
@@ -23,6 +24,7 @@ func TodoUpdate(db *sql.DB) gin.HandlerFunc {
                 Id: requestBody.Id,
                 Checked: requestBody.Checked,
                 Title: requestBody.Title,
+                IsDeleted: requestBody.IsDeleted,
             }
         results := todo.Update(item, db)
         c.JSON(http.StatusOK, results)
