@@ -12,7 +12,7 @@ import (
 
 func main() {
     // establish DB connection
-    db, err := sql.Open("mysql", "root:R00tPassword1!@tcp(127.0.0.1:3306)/tododb")
+    db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/tododb")
     if err != nil{
         panic(err.Error())
     }
@@ -29,5 +29,22 @@ func main() {
         api.DELETE("/todo/" , handlers.TodoDelete(db))
         api.DELETE("/todo/soft/" , handlers.TodoSoftDelete(db))
     }
-    r.Run("0.0.0.0:80")
+//      r.Static("/", "public/dist/typescriptAngular")
+//  r.GET("/hello", func(c *gin.Context) {
+//         c.String(http.StatusOK, "Hello from %v", "Gin")
+//     })
+//         r.GET("", func(c *gin.Context) {
+//             c.HTML(http.StatusOK, "public/dist/typescriptAngular/index.html", nil)
+//         })
+
+//         r.NoRoute(func(c *gin.Context) {
+//                 c.File("public/dist/typescriptAngular/index.html")
+//             })
+//
+//     r.GET("/", func(c *gin.Context) {
+//     	 c.HTML(http.StatusOK, "public/dist/typescriptAngular/index.html", gin.H{
+//     	        "title": "Main website",
+//     	    })
+//     	})
+    r.Run("0.0.0.0:5000")
   }
